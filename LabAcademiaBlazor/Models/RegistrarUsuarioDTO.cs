@@ -13,7 +13,7 @@ public class RegistrarUsuarioDTO
     public string? Email { get; set; }
 
     [Required(ErrorMessage = "O campo 'Telefone' é obrigatório")]
-    [RegularExpression("^[(][0-9]{2}[)][9][0-9]{4}[-][0-9]{4}$", ErrorMessage = "O campo 'Telefone' deve ter o formato: ")]
+    [RegularExpression("^[(][0-9]{2}[)][9][0-9]{4}[-][0-9]{4}$", ErrorMessage = "O campo 'Telefone' deve ter o formato: (xx)9xxxx-xxxx")]
     public string? Telefone { get; set; }
 
     //[MinLength(8, ErrorMessage = "O campo 'Senha' deve ter no mínimo 8 caracteres")]

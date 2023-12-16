@@ -33,18 +33,24 @@ public partial class Treinos : ComponentBase
             await OnInitializedAsync();
     }
 
-    protected void cm_AdicionarTreino()
+    protected async Task cm_AdicionarTreino()
     {
         var m_Parametros = new DialogParameters<Treino>();
-        C_DialogService.Show<Treino>("Novo Treino", m_Parametros);
+        var m_Dialogo = await C_DialogService.ShowAsync<Treino>("Novo Treino", m_Parametros);
+        var m_Resultado = await m_Dialogo.Result;
+        if (m_Resultado.Canceled == false)
+            await OnInitializedAsync();
     }
 
-    protected void cm_AdicionarExercicio(TreinoDTO p_Treino)
+    protected async Task cm_AdicionarExercicio(TreinoDTO p_Treino)
     {
         var m_Parametros = new DialogParameters<Exercicio>
         {
             { "C_CodigoTreino", p_Treino.Id }
         };
-        C_DialogService.Show<Exercicio>("Novo Exercício", m_Parametros);
+        var m_Dialogo = await C_DialogService.ShowAsync<Exercicio>("Novo Exercício", m_Parametros);
+        var m_Resultado = await m_Dialogo.Result;
+        if (m_Resultado.Canceled == false)
+            await OnInitializedAsync();
     }
 }

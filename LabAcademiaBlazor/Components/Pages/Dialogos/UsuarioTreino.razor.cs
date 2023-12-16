@@ -29,5 +29,6 @@ public partial class UsuarioTreino
     {
         await C_UsuarioTreinoService!.CM_RelacionarUsuarioTreinoAsync(C_UsuarioTreinoDTO!.CodigoUsuario, C_UsuarioTreinoDTO.CodigoTreino);
         MudDialog!.Close(DialogResult.Ok(true));
+        StateHasChanged();
     }
 }

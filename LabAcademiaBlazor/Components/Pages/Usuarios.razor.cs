@@ -11,7 +11,7 @@ public partial class Usuarios
     [Inject]
     public IUsuarioTreinoService? C_UsuarioTreinoService { get; set; }
     [Inject]
-    public IDialogService? C_DialogService{get;set;}
+    public IDialogService? C_DialogService { get; set; }
 
     [Parameter]
     public string? Mostrar { get; set; }
@@ -24,7 +24,7 @@ public partial class Usuarios
 
     protected override async Task OnInitializedAsync()
     {
-        if (Mostrar!.Equals("PROFESSORES") || Mostrar.Equals("professores"))
+        if (string.IsNullOrEmpty(Mostrar) == false && (Mostrar.Equals("PROFESSORES") || Mostrar.Equals("professores")))
             C_Usuarios = await C_UsuariosService!.CM_ExibirUsuarios(string.Empty);
         else
         {
@@ -79,8 +79,10 @@ public partial class Usuarios
                 { "C_Matricula", p_Usuario }
             };
 
-        await C_DialogService!.ShowAsync<UsuarioTreino>("Relacionar usuário/treino", m_Parametros);
-        StateHasChanged();
+        var m_Dialogo = await C_DialogService!.ShowAsync<UsuarioTreino>("Relacionar usuário/treino", m_Parametros);
+        var m_Resultado = await m_Dialogo.Result;
+        if (m_Resultado.Canceled == false)
+            await OnInitializedAsync();
     }
 
     protected async Task cm_ExcluirTreinoAsync(int p_IdTreino)
@@ -93,9 +95,10 @@ public partial class Usuarios
             CancelText = "Cancelar"
         };
         var m_Resultado = await C_DialogService!.ShowMessageBox(m_Options);
-        if(m_Resultado.HasValue && m_Resultado.Value)
+        if (m_Resultado.HasValue && m_Resultado.Value)
+        {
             await C_UsuarioTreinoService!.CM_RemoverRelacaoUsuarioTreinoAsync(p_IdTreino);
-
-        StateHasChanged();
+            await OnInitializedAsync();
+        }
     }
 }

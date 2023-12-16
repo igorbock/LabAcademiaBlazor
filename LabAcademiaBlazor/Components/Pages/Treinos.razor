@@ -44,7 +44,7 @@ else
                     <MudTd DataLabel="Tempo">@exercicio.Tempo</MudTd>
                 </RowTemplate>
             </MudTable>
-                <MudButton Variant="Variant.Filled" Color="Color.Success" OnClick="(() => cm_AdicionarExercicio(treino.Item))">
+                <MudButton Variant="Variant.Filled" Color="Color.Success" OnClick="(async () => await cm_AdicionarExercicio(treino.Item))">
                     <MudIcon Icon="@Icons.Material.Filled.AddBox" />
                 </MudButton>
             </ChildRowContent>
