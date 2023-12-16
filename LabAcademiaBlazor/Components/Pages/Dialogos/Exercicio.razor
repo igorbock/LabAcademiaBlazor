@@ -1,0 +1,43 @@
+﻿<MudDialog>
+    <DialogContent>
+        @if (C_ExercicioDTO == null)
+        {
+            <EditForm Model="@C_NovoExercicio" OnValidSubmit="cm_Salvar">
+                <DataAnnotationsValidator />
+                <MudCard>
+                    <MudCardContent>
+                        <MudTextField Label="Descrição" @bind-Value="C_NovoExercicio!.Descricao" For="(() => C_NovoExercicio!.Descricao)" />
+                        <MudTextField Label="Séries" @bind-Value="C_NovoExercicio.Series" For="(() => C_NovoExercicio.Series)" />
+                        <MudTextField Label="Repetição" @bind-Value="C_NovoExercicio.Repeticao" For="(() => C_NovoExercicio.Repeticao)" />
+                        <MudTextField Label="Tempo" @bind-Value="C_NovoExercicio.Tempo" For="(() => C_NovoExercicio.Tempo)" />
+                        <MudTextField Label="Carga" @bind-Value="C_NovoExercicio.Carga" For="(() => C_NovoExercicio.Carga)" />
+                        <MudTextField Label="Código Treino" @bind-Value="C_NovoExercicio.CodigoTreino" For="(() => C_NovoExercicio.CodigoTreino)" />
+                    </MudCardContent>
+                </MudCard>
+            </EditForm>
+        }
+        else
+        {
+            <EditForm Model="@C_ExercicioDTO" OnValidSubmit="cm_Salvar">
+                <DataAnnotationsValidator />
+                <MudCard>
+                    <MudCardContent>
+                        <MudTextField Disabled="true" Label="Id" @bind-Value="C_ExercicioDTO.Id" For="(() => C_ExercicioDTO.Id)" />
+                        <MudTextField Label="Descrição" @bind-Value="C_ExercicioDTO.Descricao" For="(() => C_ExercicioDTO.Descricao)" />
+                        <MudTextField Label="Séries" @bind-Value="C_ExercicioDTO.Series" For="(() => C_ExercicioDTO.Series)" />
+                        <MudTextField Label="Repetição" @bind-Value="C_ExercicioDTO.Repeticao" For="(() => C_ExercicioDTO.Repeticao)" />
+                        <MudTextField Label="Tempo" @bind-Value="C_ExercicioDTO.Tempo" For="(() => C_ExercicioDTO.Tempo)" />
+                        <MudTextField Label="Carga" @bind-Value="C_ExercicioDTO.Carga" For="(() => C_ExercicioDTO.Carga)" />
+                    </MudCardContent>
+                </MudCard>
+            </EditForm>
+        }
+    </DialogContent>
+    <DialogActions>
+        @if(C_NovoExercicio == null)
+        {
+            <MudButton Color="Color.Error" OnClick="cm_Excluir"><MudIcon Icon="@Icons.Material.Filled.DeleteForever" /></MudButton>
+        }
+        <MudButton Color="Color.Primary" OnClick="cm_Salvar"><MudIcon Icon="@Icons.Material.Filled.Save" /></MudButton>
+    </DialogActions>
+</MudDialog>

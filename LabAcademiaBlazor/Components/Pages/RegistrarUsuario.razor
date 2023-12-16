@@ -1,0 +1,112 @@
+﻿@page "/registrar"
+@inject IAuthService C_AuthService
+@inject IUsuariosService C_UsuarioService
+@inject IUsuarioService<AlunoDTO> C_AlunoService
+@inject IDialogService C_DialogService
+@inject NavigationManager C_NavigationManager
+@* @attribute [Authorize(Roles = "ADM,PROFESSOR")] *@
+
+@if (C_MostrarErros)
+{
+    <div class="alert alert-danger" role="alert">
+        @foreach (var error in C_Erros)
+        {
+            <p>@error</p>
+        }
+    </div>
+}
+
+<AuthorizeView Roles="ADM">
+    <Authorized>
+        <h3>Registrar Professor</h3>
+    </Authorized>
+    <NotAuthorized>
+        <h3>Registrar Aluno</h3>
+    </NotAuthorized>
+</AuthorizeView>
+
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">Preencher formulário de cadastro</h5>
+        <EditForm Model="C_Usuario" FormName="Registrar">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+
+            <div class="form-group">
+                <label for="nome">Nome</label>
+                <InputText Id="nome" class="form-control" @bind-Value="C_Usuario.Nome" />
+                <ValidationMessage For="@(() => C_Usuario.Nome)" />
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <InputText Id="email" class="form-control" @bind-Value="C_Usuario.Email" />
+                <ValidationMessage For="@(() => C_Usuario.Email)" />
+            </div>
+            <div class="form-group">
+                <label for="telefone">Telefone</label>
+                <InputText Id="telefone" class="form-control" @bind-Value="C_Usuario.Telefone" />
+                <ValidationMessage For="@(() => C_Usuario.Telefone)" />
+            </div>
+            <AuthorizeView Context="Professor" Roles="ADM">
+                <Authorized>
+                    <div class="form-group">
+                        <label for="senha">Senha</label>
+                        <InputText Id="senha" type="password" class="form-control" @bind-Value="C_Usuario.Senha" />
+                        <ValidationMessage For="@(() => C_Usuario.Senha)" />
+                    </div>
+                    <div class="form-group">
+                        <label for="confirmar">Confirma Senha</label>
+                        <InputText Id="confirmar" type="password" class="form-control" @bind-Value="C_Usuario.ConfirmaSenha" />
+                        <ValidationMessage For="@(() => C_Usuario.ConfirmaSenha)" />
+                    </div>
+                    <div class="form-group">
+                        <label for="cargo">Cargo</label><br />
+                        <input type="radio" checked="@(C_Usuario.Cargo == "PROFESSOR")" name="Cargo" @onchange="@(() => C_Usuario.Cargo = "PROFESSOR")" /> PROFESSOR<br />
+                        <ValidationMessage For="@(() => C_Usuario.Cargo)" />
+                    </div>
+                </Authorized>
+            </AuthorizeView>
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary" @onclick="cm_Registrar">Registrar</button>
+            </div>
+        </EditForm>
+    </div>
+</div>
+
+@code {
+    public RegistrarUsuarioDTO C_Usuario { get; set; } = new RegistrarUsuarioDTO();
+    private bool C_MostrarErros { get; set; }
+    private IEnumerable<string> C_Erros { get; set; } = new List<string>();
+
+    public string? C_QRCode { get; private set; }
+
+    private async Task cm_Registrar()
+    {
+        C_MostrarErros = false;
+
+        try
+        {
+            var m_AlunoDTO = new AlunoDTO
+                {
+                    Nome = C_Usuario.Nome,
+                    Telefone = C_Usuario.Telefone,
+                    Email = C_Usuario.Email
+                };
+            var m_Matricula = await C_AlunoService!.CM_CriarUsuarioAsync(m_AlunoDTO);
+
+            C_QRCode = await C_AlunoService.CM_CriarQRCodeAsync(m_Matricula);
+
+            var m_Opcoes = new DialogOptions { CloseOnEscapeKey = false };
+            var m_Parametros = new DialogParameters<Registro>();
+            m_Parametros.Add("C_QRCode", C_QRCode);
+            C_DialogService.Show<Registro>("QRCode", m_Parametros, m_Opcoes);
+
+            C_NavigationManager.NavigateTo("/usuarios/ALUNOS");
+        }
+        catch (Exception ex)
+        {
+            C_MostrarErros = true;
+            C_Erros = new[] { ex.Message };
+        }
+    }
+}

@@ -1,0 +1,16 @@
+﻿@inject NavigationManager C_NavigationManager
+
+<AuthorizeView>
+    <Authorized>
+        <MudAvatar Color="Color.Dark">@context.User.Identity!.Name!.ToArray()[0]</MudAvatar>
+        <MudIconButton Icon="@Icons.Material.Outlined.Logout" Color="Color.Inherit" OnClick="((e) => cm_Logout())" />
+    </Authorized>
+    <NotAuthorized>
+        <MudIconButton Icon="@Icons.Material.Outlined.Login" Color="Color.Inherit" OnClick="((e) => cm_Login())" />
+    </NotAuthorized>
+</AuthorizeView>
+
+@code {
+    private void cm_Login() => C_NavigationManager.NavigateTo("/login");
+    private void cm_Logout() => C_NavigationManager.NavigateTo("/logout");
+}

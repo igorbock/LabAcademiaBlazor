@@ -1,0 +1,13 @@
+﻿<MudDialog Class="d-flex align-center">
+    <DialogContent >
+        <MudImage Src="@C_QRCode" Class="d-flex" />
+    </DialogContent>
+</MudDialog>
+
+@code {
+    [CascadingParameter]
+    MudDialogInstance? MudDialog { get; set; }
+
+    [Parameter]
+    public string? C_QRCode { get; set; }
+}

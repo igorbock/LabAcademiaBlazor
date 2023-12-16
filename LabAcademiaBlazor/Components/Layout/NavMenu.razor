@@ -1,0 +1,16 @@
+﻿<MudNavMenu>
+    <MudNavLink Href="/" Match="NavLinkMatch.All">Home</MudNavLink>
+    <AuthorizeView Roles="ADM">
+        <Authorized>
+            <MudNavLink Href="/usuarios/PROFESSORES" Match="NavLinkMatch.All">Professores</MudNavLink>
+            <MudNavLink Href="/registrar" Match="NavLinkMatch.All">Registrar</MudNavLink>
+        </Authorized>
+    </AuthorizeView>
+    <AuthorizeView Roles="PROFESSOR">
+        <Authorized>
+            <MudNavLink Href="/registrar" Match="NavLinkMatch.All">Registrar</MudNavLink>
+            <MudNavLink Href="/usuarios/ALUNOS" Match="NavLinkMatch.All">Alunos</MudNavLink>
+            <MudNavLink Href="/treinos" Match="NavLinkMatch.All">Treinos</MudNavLink>
+        </Authorized>
+    </AuthorizeView>
+</MudNavMenu>

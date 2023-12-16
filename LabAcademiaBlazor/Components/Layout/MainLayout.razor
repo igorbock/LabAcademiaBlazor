@@ -1,0 +1,34 @@
+﻿@inherits LayoutComponentBase
+@inject NavigationManager C_NavigationManager
+
+<MudThemeProvider />
+<MudDialogProvider 
+    CloseButton="true" 
+    DisableBackdropClick="true" 
+    FullWidth="true"
+    MaxWidth="MaxWidth.Medium" />
+<MudSnackbarProvider />
+
+<MudLayout>
+    <MudAppBar>
+        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="((e) => cm_ExibirMenu())" />
+        LabAcademia
+        <MudSpacer />
+        <LoginDisplay/>
+    </MudAppBar>
+    <MudDrawer @bind-Open="c_ExibirMenu">
+        <NavMenu />
+    </MudDrawer>
+    <MudMainContent>
+        <MudContainer MaxWidth="MaxWidth.Large">
+            @Body
+        </MudContainer>        
+    </MudMainContent>
+</MudLayout>
+
+@code{
+    private bool c_ExibirMenu = false;
+
+    private void cm_ExibirMenu() => c_ExibirMenu = !c_ExibirMenu;
+    private void cm_Login() => C_NavigationManager.NavigateTo("/login");
+}

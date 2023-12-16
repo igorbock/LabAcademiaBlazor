@@ -1,0 +1,39 @@
+﻿@inject ITreinosService C_TreinoService
+
+<MudDialog>
+    <DialogContent>
+        @if (C_TreinoDTO == null)
+        {
+            <EditForm Model="@C_NovoTreino" OnValidSubmit="cm_Salvar">
+                <DataAnnotationsValidator />
+                <MudCard>
+                    <MudCardContent>
+                        <MudTextField T="char?" Label="Código" @bind-Value="C_NovoTreino!.Codigo" For="(() => C_NovoTreino!.Codigo)" />
+                        <MudTextField Label="Nome" @bind-Value="C_NovoTreino.Nome" For="(() => C_NovoTreino.Nome)" />
+                    </MudCardContent>
+                </MudCard>
+            </EditForm>
+        }
+        else
+        {
+            <EditForm Model="@C_TreinoDTO" OnValidSubmit="cm_Salvar">
+                <DataAnnotationsValidator />
+                <MudCard>
+                    <MudCardContent>
+                        <MudTextField Disabled="true" Label="Id" @bind-Value="C_TreinoDTO.Id" For="(() => C_TreinoDTO.Id)" />
+                        <MudTextField T="char?" Label="Código" @bind-Value="C_TreinoDTO.Codigo" For="(() => C_TreinoDTO.Codigo)" />
+                        <MudTextField Label="Nome" @bind-Value="C_TreinoDTO.Nome" For="(() => C_TreinoDTO.Nome)" />
+                        <MudCheckBox Label="Ativo" @bind-Checked="C_TreinoDTO.Ativo" />
+                    </MudCardContent>
+                </MudCard>
+            </EditForm>
+        }
+    </DialogContent>
+    <DialogActions>
+        @if(C_NovoTreino == null)
+        {
+            <MudButton Color="Color.Error" OnClick="cm_Excluir"><MudIcon Icon="@Icons.Material.Filled.DeleteForever" /></MudButton>
+        }
+        <MudButton Color="Color.Primary" OnClick="cm_Salvar"><MudIcon Icon="@Icons.Material.Filled.Save" /></MudButton>
+    </DialogActions>
+</MudDialog>

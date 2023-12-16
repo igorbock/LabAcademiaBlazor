@@ -1,0 +1,69 @@
+﻿@page "/usuarios/{Mostrar}"
+@attribute [Authorize(Roles = "ADM,PROFESSOR")]
+@attribute [StreamRendering(true)]
+
+    @if (C_Usuarios == null)
+{
+    <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
+}
+else
+{
+    <AuthorizeView Roles="ADM">
+        <Authorized>
+            <MudText Typo="Typo.h5" Align="Align.Center" Class="mt-5 mb-5">Usuários</MudText>
+
+            <MudDataGrid Hover="true" T="UsuarioDTO" Items="@C_Usuarios" MultiSelection="false" RowClick="cm_UsuarioSelecionado">
+                <Columns>
+                    <PropertyColumn Property="a => a.Nome" Title="Nome" />
+                    <PropertyColumn Property="a => a.Email" Title="E-mail" />
+                    <PropertyColumn Property="a => a.Telefone" Title="Telefone" />
+                    <TemplateColumn Context="usuario" Title="Ativo?">
+                        <CellTemplate>
+                            <MudCheckBox Disabled="true" Checked="@usuario.Item.Ativo" Color="Color.Primary" />
+                        </CellTemplate>
+                    </TemplateColumn>
+                </Columns>
+            </MudDataGrid>
+        </Authorized>
+        <NotAuthorized>
+            <MudText Typo="Typo.h5" Align="Align.Center" Class="mt-5 mb-5">Alunos</MudText>
+
+            <MudDataGrid Context="usuario" Hover="true" T="UsuarioDTO" Items="@C_Usuarios" MultiSelection="false" RowClick="cm_UsuarioSelecionado">
+                <Columns>
+                    <HierarchyColumn T="UsuarioDTO" />
+                    <PropertyColumn Property="a => a.Nome" Title="Nome" />
+                    <PropertyColumn Property="a => a.Email" Title="E-mail" />
+                    <PropertyColumn Property="a => a.Telefone" Title="Telefone" />
+                    <TemplateColumn Context="usuario_ativo" Title="Ativo?">
+                        <CellTemplate>
+                            <MudCheckBox Disabled="true" Checked="usuario_ativo.Item.Ativo" Color="Color.Primary" />
+                        </CellTemplate>
+                    </TemplateColumn>
+                </Columns>
+                <ChildRowContent>
+                    <MudTable T="TreinoDTO" Context="treino" Hover="true" Items="@C_TreinosSelecionados!.Where(a => a.Matricula == usuario.Item.Matricula)">
+                        <HeaderContent>
+                            <MudTh>Id</MudTh>
+                            <MudTh>Nome</MudTh>
+                            <MudTh>Código</MudTh>
+                            <MudTh>Opções</MudTh>
+                        </HeaderContent>
+                        <RowTemplate>
+                            <MudTd DataLabel="Id">@treino.Id</MudTd>
+                            <MudTd DataLabel="Nome">@treino.Nome</MudTd>
+                            <MudTd DataLabel="Código">@treino.Codigo</MudTd>
+                            <MudTd DataLabel="Opções">
+                                <MudButton Color="Color.Error" OnClick="@(() => cm_ExcluirTreinoAsync(treino.Id))">
+                                    <MudIcon Icon="@Icons.Material.Filled.DeleteForever" />
+                                </MudButton>
+                            </MudTd>
+                        </RowTemplate>
+                    </MudTable>
+                    <MudButton Variant="Variant.Filled" Color="Color.Success" OnClick="(() => cm_AdicionarRelacao(usuario.Item.Matricula))">
+                        <MudIcon Icon="@Icons.Material.Filled.AddBox" />
+                    </MudButton>
+                </ChildRowContent>
+            </MudDataGrid>
+        </NotAuthorized>
+    </AuthorizeView>
+}

@@ -1,0 +1,22 @@
+﻿<MudDialog>
+    <DialogContent>
+        <EditForm Model="@C_UsuarioTreinoDTO" OnValidSubmit="cm_Salvar">
+            <DataAnnotationsValidator />
+            <MudCard>
+                <MudCardContent>
+                    <MudSelect T="int" Label="Treino" Variant="Variant.Outlined" @bind-Value="@C_UsuarioTreinoDTO!.CodigoTreino">
+                        @foreach(var item in C_Treinos!)
+                        {
+                            <MudSelectItem Value="@item.Id" />
+                        }
+                    </MudSelect>
+
+                    <MudTextField Disabled="true" Label="Usuário" @bind-Value="@C_UsuarioTreinoDTO!.CodigoUsuario" For="(() => C_UsuarioTreinoDTO!.CodigoUsuario)" />
+                </MudCardContent>
+            </MudCard>
+        </EditForm>
+    </DialogContent>
+    <DialogActions>
+        <MudButton Color="Color.Primary" OnClick="cm_Salvar"><MudIcon Icon="@Icons.Material.Filled.Save" /></MudButton>
+    </DialogActions>
+</MudDialog>

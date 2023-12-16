@@ -1,0 +1,56 @@
+﻿@page "/treinos"
+@inject IDialogService C_DialogService
+@inject ITreinosService C_TreinosService
+@inject IExercicioService C_ExercicioService
+@attribute [Authorize(Roles = "PROFESSOR")]
+@attribute [StreamRendering(true)]
+
+@if (C_Treinos == null)
+{
+    <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
+}
+else
+{
+    <MudText Typo="Typo.h5" Align="Align.Center" Class="mt-5 mb-5">Treinos</MudText>
+
+    <MudDataGrid Context="treino" Hover="true" T="TreinoDTO" Items="@C_Treinos" MultiSelection="false" RowClick="cm_TreinoSelecionado">
+        <Columns>
+            <HierarchyColumn T="TreinoDTO" />
+            <PropertyColumn Property="a => a.Id" Title="Id" />
+            <PropertyColumn Property="a => a.Nome" Title="Nome" />
+            <PropertyColumn Property="a => a.Codigo" Title="Código" />
+            <TemplateColumn Title="Ativo?">
+                <CellTemplate>
+                    <MudCheckBox Disabled="true" Checked="@context.Item.Ativo" Color="Color.Primary" />
+                </CellTemplate>
+            </TemplateColumn>
+        </Columns>
+        <ChildRowContent>
+            <MudTable T="ExercicioDTO" Context="exercicio" Hover="true" Items="@C_Exercicios!.Where(a => a.CodigoTreino == treino.Item.Id)" OnRowClick="cm_ExercicioSelecionado">
+                <HeaderContent>
+                    <MudTh>Id</MudTh>
+                    <MudTh>Descrição</MudTh>
+                    <MudTh>Séries</MudTh>
+                    <MudTh>Repetição</MudTh>
+                    <MudTh>Carga</MudTh>
+                    <MudTh>Tempo</MudTh>
+                </HeaderContent>
+                <RowTemplate>
+                    <MudTd DataLabel="Id">@exercicio.Id</MudTd>
+                    <MudTd DataLabel="Descrição">@exercicio.Descricao</MudTd>
+                    <MudTd DataLabel="Séries">@exercicio.Series</MudTd>
+                    <MudTd DataLabel="Repetição">@exercicio.Repeticao</MudTd>
+                    <MudTd DataLabel="Carga">@exercicio.Carga</MudTd>
+                    <MudTd DataLabel="Tempo">@exercicio.Tempo</MudTd>
+                </RowTemplate>
+            </MudTable>
+                <MudButton Variant="Variant.Filled" Color="Color.Success" OnClick="(() => cm_AdicionarExercicio(treino.Item))">
+                    <MudIcon Icon="@Icons.Material.Filled.AddBox" />
+                </MudButton>
+            </ChildRowContent>
+        </MudDataGrid>
+
+    <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="cm_AdicionarTreino">
+        <MudIcon Icon="@Icons.Material.Filled.AddBox" />
+    </MudButton>
+}
