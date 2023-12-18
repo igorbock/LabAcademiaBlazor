@@ -12,6 +12,8 @@ public partial class Usuarios
     public IUsuarioTreinoService? C_UsuarioTreinoService { get; set; }
     [Inject]
     public IDialogService? C_DialogService { get; set; }
+    [Inject]
+    public ISnackbar? C_Snackbar { get; set; }
 
     [Parameter]
     public string? Mostrar { get; set; }
@@ -54,7 +56,13 @@ public partial class Usuarios
             {
                 { "C_UsuarioDTO", p_Evento.Item }
             };
-            C_DialogService!.Show<Usuario>(p_Evento.Item.Nome, m_Parametros);
+            var m_Dialogo = C_DialogService!.Show<Usuario>(p_Evento.Item.Nome, m_Parametros);
+            var m_Resultado = await m_Dialogo.Result;
+            if (m_Resultado.Canceled == false)
+            {
+                await OnInitializedAsync();
+                C_Snackbar!.Add("Alterado com sucesso!", Severity.Success);
+            }
         }
         else
         {
@@ -82,7 +90,10 @@ public partial class Usuarios
         var m_Dialogo = await C_DialogService!.ShowAsync<UsuarioTreino>("Relacionar usuário/treino", m_Parametros);
         var m_Resultado = await m_Dialogo.Result;
         if (m_Resultado.Canceled == false)
+        {
             await OnInitializedAsync();
+            C_Snackbar!.Add("Alterado com sucesso!", Severity.Success);
+        }
     }
 
     protected async Task cm_ExcluirTreinoAsync(int p_IdTreino)
@@ -99,6 +110,7 @@ public partial class Usuarios
         {
             await C_UsuarioTreinoService!.CM_RemoverRelacaoUsuarioTreinoAsync(p_IdTreino);
             await OnInitializedAsync();
+            C_Snackbar!.Add("Relação removida com sucesso!", Severity.Success);
         }
     }
 }

@@ -5,37 +5,25 @@
             <MudCard>
                 <MudCardContent>
                     <MudTextField Disabled="true" Label="Id" @bind-Value="@C_UsuarioDTO!.Id" For="(() => C_UsuarioDTO!.Id)" />
-                    <MudTextField Label="Nome" @bind-Value="@C_UsuarioDTO!.Nome" For="(() => C_UsuarioDTO!.Nome)" />
-                    <MudTextField Label="E-mail" @bind-Value="@C_UsuarioDTO!.Email" For="(() => C_UsuarioDTO!.Email)" />
+                    <MudTextField Disabled="true" Label="Nome" @bind-Value="@C_UsuarioDTO!.Nome" For="(() => C_UsuarioDTO!.Nome)" />
+                    <MudTextField Disabled="true" Label="E-mail" @bind-Value="@C_UsuarioDTO!.Email" For="(() => C_UsuarioDTO!.Email)" />
                     <MudTextField Mask="C_MascaraTelefone" Label="Telefone" @bind-Value="@C_UsuarioDTO!.Telefone" For="(() => C_UsuarioDTO!.Telefone)" />
-                    <MudSelect @bind-Text="C_UsuarioDTO.Cargo" T="string" Label="Cargo" AnchorOrigin="Origin.BottomCenter">
+                    <MudSelect Disabled="true" @bind-Text="C_UsuarioDTO.Cargo" T="string" Label="Nível" AnchorOrigin="Origin.BottomCenter">
                         <MudSelectItem Value="@("PROFESSOR")" />
                         <MudSelectItem Value="@("ALUNO")" />
                     </MudSelect>
-                    <MudCheckBox Label="Ativo" @bind-Checked="C_UsuarioDTO.Ativo" />
+                    <MudCheckBox Disabled="true" Label="Ativo" @bind-Checked="C_UsuarioDTO.Ativo" />
                 </MudCardContent>
             </MudCard>
         </EditForm>
     </DialogContent>
     <DialogActions>
-        <MudButton OnClick="cm_Cancelar">Cancelar</MudButton>
-        <MudButton Color="Color.Primary" OnClick="cm_Salvar">Salvar</MudButton>
+        @if(C_UsuarioDTO!.Cargo!.Equals("ALUNO"))
+        {
+            <MudButton OnClick="@(() => cm_Desativar(C_UsuarioDTO!.Nome!))"><MudIcon Icon="@Icons.Material.Filled.AirlineSeatIndividualSuite" /></MudButton>
+            <MudSpacer />
+        }
+        <MudButton OnClick="cm_Cancelar"><MudIcon Icon="@Icons.Material.Filled.Cancel" /></MudButton>
+        <MudButton Color="Color.Primary" OnClick="cm_Salvar"><MudIcon Icon="@Icons.Material.Filled.Save" /></MudButton>
     </DialogActions>
 </MudDialog>
-
-
-@code {
-    [CascadingParameter]
-    MudDialogInstance? MudDialog { get; set; }
-
-    [Parameter]
-    public UsuarioDTO? C_UsuarioDTO { get; set; }
-
-    public PatternMask C_MascaraTelefone = new PatternMask("(##)9####-####")
-    {
-        MaskChars = new[] { new MaskChar('#', @"[0-9]") }
-    };
-
-    void cm_Cancelar() => MudDialog!.Cancel();
-    void cm_Salvar() => MudDialog!.Close(DialogResult.Ok(true));
-}

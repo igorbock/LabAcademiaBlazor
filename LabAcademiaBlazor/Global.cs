@@ -5,6 +5,7 @@ global using System.Text.Json.Serialization;
 global using System.ComponentModel.DataAnnotations;
 global using System.Text;
 global using System.ComponentModel.DataAnnotations.Schema;
+global using System.IdentityModel.Tokens.Jwt;
 
 global using Microsoft.AspNetCore.Components.Authorization;
 global using Microsoft.AspNetCore.Identity;
@@ -19,6 +20,7 @@ global using MudBlazor.Services;
 global using LabAcademiaBlazor.Interfaces;
 global using LabAcademiaBlazor.Helpers;
 global using LabAcademiaBlazor.Models;
+global using LabAcademiaBlazor.Extensions;
 global using LabAcademiaBlazor;
 global using LabAcademiaBlazor.Components;
 global using LabAcademiaBlazor.Services;

@@ -7,6 +7,7 @@ builder.Services.AddScoped<AuthenticationStateProvider, LabAuthenticationStatePr
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUsuariosService, UsuariosService>();
 builder.Services.AddScoped<IUsuarioService<AlunoDTO>, AlunoService>();
+builder.Services.AddScoped<IUsuarioService<RegistrarUsuarioDTO>, ProfessorService>();
 builder.Services.AddScoped<ITreinosService, TreinosService>();
 builder.Services.AddScoped<IExercicioService, ExercicioService>();
 builder.Services.AddScoped<IUsuarioTreinoService, UsuarioTreinoService>();

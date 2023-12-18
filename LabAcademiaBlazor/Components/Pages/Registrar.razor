@@ -26,17 +26,18 @@
 
         <MudTextField Label="Nome" @bind-Value="C_Usuario.Nome" For="(() => C_Usuario.Nome)" />
         <MudTextField Label="E-mail" @bind-Value="C_Usuario.Email" For="(() => C_Usuario.Email)" />
-        <MudTextField Label="Telefone" @bind-Value="C_Usuario.Telefone" For="(() => C_Usuario.Telefone)" />
+        <MudTextField Mask="C_MascaraTelefone" Label="Telefone" @bind-Value="C_Usuario.Telefone" For="(() => C_Usuario.Telefone)" />
 
         <AuthorizeView Context="Professor" Roles="ADM">
             <Authorized>
-                <MudTextField Label="Senha" @bind-Value="C_Usuario.Senha" For="(() => C_Usuario.Senha)" />
-                <MudTextField Label="Confirma Senha" @bind-Value="C_Usuario.ConfirmaSenha" For="(() => C_Usuario.ConfirmaSenha)" />
-                <MudRadioGroup @bind-SelectedOption="C_Usuario.Cargo" For="(() => C_Usuario.Cargo)">
-                    <MudRadio Option="@("PROFESSOR")">Professor</MudRadio>
-                </MudRadioGroup>
+                <MudTextField InputType="InputType.Password" Label="Senha" @bind-Value="C_Usuario.Senha" For="(() => C_Usuario.Senha)" />
+                <MudTextField InputType="InputType.Password" Label="Confirma Senha" @bind-Value="C_Usuario.ConfirmaSenha" For="(() => C_Usuario.ConfirmaSenha)" />
+                <MudButton @ref="C_BtnRegistrarProfessor" Class="mt-5" Variant="Variant.Filled" Color="Color.Primary" OnClick="cm_RegistrarProfessor">Registrar</MudButton>
             </Authorized>
+            <NotAuthorized>
+                <MudButton Class="mt-5" Variant="Variant.Filled" Color="Color.Primary" OnClick="cm_RegistrarAluno">Registrar</MudButton>
+            </NotAuthorized>
         </AuthorizeView>
-        <MudButton Class="mt-5" Variant="Variant.Filled" Color="Color.Primary" OnClick="cm_Registrar">Registrar</MudButton>
+        
     </EditForm>
 </MudPaper>

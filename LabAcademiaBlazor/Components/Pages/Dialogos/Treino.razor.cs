@@ -37,7 +37,8 @@ public partial class Treino
 
     protected async Task cm_Salvar()
     {
-        var m_Resultado = await C_DialogoService!.ShowMessageBox("Confirma", "Confirmar alteração?", cancelText: "Cancelar");
+        var m_Mensagem = C_Editando ? "Confirmar alteração?" : "Confirmar?";
+        var m_Resultado = await C_DialogoService!.ShowMessageBox("Confirma", m_Mensagem, cancelText: "Cancelar");
         if (m_Resultado == false)
             return;
 

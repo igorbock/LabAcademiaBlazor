@@ -3,58 +3,31 @@
 @inject IAuthService C_AuthService
 @inject NavigationManager C_NavigationManager
 
-<h3>Login</h3>
+<MudText Typo="Typo.h5" Align="Align.Center" Class="m-3">Login</MudText>
 
 @if (C_MostrarErros)
 {
-    <div class="alert alert-danger" role="alert">
-        @foreach (var error in C_Erros)
-        {
-            <p>@error</p>
-        }
+    <div class="d-flex justify-content-center">
+        <MudPaper Width="300px" Class="alert alert-danger" Elevation="2">
+            @foreach (var error in C_Erros)
+            {
+                <MudText Typo="Typo.body1">@error</MudText>
+            }
+        </MudPaper>
     </div>
 }
 
-<div class="card">
-    <div class="card-body">
-        <h5 class="card-title">Insira suas credenciais</h5>
-        <EditForm Model="@C_Login" OnValidSubmit="@cm_Login" FormName="Login">
+<div class="d-flex justify-content-center">
+    <MudPaper Width="300px" Class="p-4" Elevation="5">
+        <EditForm Model="C_Login" FormName="Login">
             <DataAnnotationsValidator />
 
-            <div class="form-group">
-                <label for="usuario">Usuário</label>
-                <InputText id="usuario" class="form-control" @bind-Value="@C_Login!.Usuario" />
-                <ValidationMessage For="@(() => @C_Login.Usuario)" />
+            <MudTextField Label="Usuário" @bind-Value="C_Login!.Usuario" For="(() => C_Login!.Usuario)" />
+            <MudTextField InputType="InputType.Password" Label="Senha" @bind-Value="C_Login.Senha" For="(() => C_Login.Senha)" />
+
+            <div class="d-flex justify-content-center">
+                <MudButton Variant="Variant.Filled" Class="mt-5" OnClick="cm_Login" Color="Color.Primary">Login</MudButton>
             </div>
-            <div class="form-group">
-                <label for="senha">Senha</label>
-                <InputText id="senha" type="password" class="form-control" @bind-Value="@C_Login.Senha" />
-                <ValidationMessage For="@(() => @C_Login.Senha)" />
-            </div>
-            <button type="submit" class="btn btn-primary">Login</button>
         </EditForm>
-    </div>
+    </MudPaper>
 </div>
-
-@code {
-    public LoginDTO? C_Login { get; set; } = new LoginDTO();
-    private bool C_MostrarErros { get; set; }
-    private IEnumerable<string> C_Erros { get; set; } = new List<string>();
-
-    private async Task cm_Login()
-    {
-        C_MostrarErros = false;
-
-        try
-        {
-            await C_AuthService.CM_Login(C_Login!);
-
-            C_NavigationManager.NavigateTo("/");
-        }
-        catch (Exception ex)
-        {
-            C_MostrarErros = true;
-            C_Erros = new[] { ex.Message };
-        }
-    }
-}

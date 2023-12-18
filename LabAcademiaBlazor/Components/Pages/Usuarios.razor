@@ -10,7 +10,7 @@ else
 {
     <AuthorizeView Roles="ADM">
         <Authorized>
-            <MudText Typo="Typo.h5" Align="Align.Center" Class="mt-5 mb-5">Usuários</MudText>
+            <MudText Typo="Typo.h5" Align="Align.Center" Class="mt-5 mb-5">Professores</MudText>
 
             <MudDataGrid Hover="true" T="UsuarioDTO" Items="@C_Usuarios" MultiSelection="false" RowClick="cm_UsuarioSelecionado">
                 <Columns>
@@ -30,7 +30,7 @@ else
 
             <MudDataGrid Context="usuario" Hover="true" T="UsuarioDTO" Items="@C_Usuarios" MultiSelection="false" RowClick="cm_UsuarioSelecionado">
                 <Columns>
-                    <HierarchyColumn T="UsuarioDTO" />
+                    <HierarchyColumn T="UsuarioDTO" ButtonDisabledFunc="@(a => a.Ativo == false)" />
                     <PropertyColumn Property="a => a.Nome" Title="Nome" />
                     <PropertyColumn Property="a => a.Email" Title="E-mail" />
                     <PropertyColumn Property="a => a.Telefone" Title="Telefone" />
@@ -59,7 +59,7 @@ else
                             </MudTd>
                         </RowTemplate>
                     </MudTable>
-                    <MudButton Variant="Variant.Filled" Color="Color.Success" OnClick="(() => cm_AdicionarRelacao(usuario.Item.Matricula))">
+                        <MudButton Class="mt-3" Variant="Variant.Filled" Color="Color.Success" OnClick="(() => cm_AdicionarRelacao(usuario.Item.Matricula))">
                         <MudIcon Icon="@Icons.Material.Filled.AddBox" />
                     </MudButton>
                 </ChildRowContent>

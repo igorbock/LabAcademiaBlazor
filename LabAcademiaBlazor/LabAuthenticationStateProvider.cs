@@ -31,6 +31,11 @@ public class LabAuthenticationStateProvider :  AuthenticationStateProvider
         if (string.IsNullOrWhiteSpace(m_TokenArmazenado))
             return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
 
+        var m_Token = new JwtSecurityToken(m_TokenArmazenado);
+        var m_TokenInvalido = m_Token.CMX_ValidarToken() == false;
+        if(m_TokenInvalido)
+            return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
+
         c_HttpClient!.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", m_TokenArmazenado);
 
         return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity(c_SystemStringHelper!.CM_TransformarTokenEmClaims(m_TokenArmazenado), "jwt")));

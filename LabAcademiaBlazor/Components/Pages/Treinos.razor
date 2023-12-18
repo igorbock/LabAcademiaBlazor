@@ -1,7 +1,4 @@
 ﻿@page "/treinos"
-@inject IDialogService C_DialogService
-@inject ITreinosService C_TreinosService
-@inject IExercicioService C_ExercicioService
 @attribute [Authorize(Roles = "PROFESSOR")]
 @attribute [StreamRendering(true)]
 
@@ -44,13 +41,13 @@ else
                     <MudTd DataLabel="Tempo">@exercicio.Tempo</MudTd>
                 </RowTemplate>
             </MudTable>
-                <MudButton Variant="Variant.Filled" Color="Color.Success" OnClick="(async () => await cm_AdicionarExercicio(treino.Item))">
+                <MudButton Class="mt-3" Variant="Variant.Filled" Color="Color.Success" OnClick="(async () => await cm_AdicionarExercicio(treino.Item))">
                     <MudIcon Icon="@Icons.Material.Filled.AddBox" />
                 </MudButton>
             </ChildRowContent>
         </MudDataGrid>
 
-    <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="cm_AdicionarTreino">
+    <MudButton Class="mt-3" Variant="Variant.Filled" Color="Color.Primary" OnClick="cm_AdicionarTreino">
         <MudIcon Icon="@Icons.Material.Filled.AddBox" />
     </MudButton>
 }
