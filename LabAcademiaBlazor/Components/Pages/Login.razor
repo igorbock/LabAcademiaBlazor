@@ -26,8 +26,15 @@
             <MudTextField InputType="InputType.Password" Label="Senha" @bind-Value="C_Login.Senha" For="(() => C_Login.Senha)" />
 
             <div class="d-flex justify-content-center">
-                <MudButton Variant="Variant.Filled" Class="mt-5" OnClick="cm_Login" Color="Color.Primary">Login</MudButton>
+                <MudButton Variant="Variant.Filled" Class="mt-5" OnClick="cm_Login" Color="Color.Primary" Disabled="C_Carregando">Login</MudButton>
             </div>
         </EditForm>
     </MudPaper>
 </div>
+
+@if (C_Carregando)
+{
+    <div class="d-flex justify-content-center mt-5">
+        <MudProgressCircular Color="Color.Inherit" Indeterminate="true" />
+    </div>
+}

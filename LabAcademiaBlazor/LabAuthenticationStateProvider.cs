@@ -2,18 +2,18 @@
 
 public class LabAuthenticationStateProvider :  AuthenticationStateProvider
 {
-    private readonly HttpClient? c_HttpClient;
-    private readonly ProtectedSessionStorage c_ProtectedSessionStorage;
+    private readonly IHttpClientFactory? c_HttpClientFactory;
+    private readonly ILocalStorageService c_Storage;
     private readonly ISystemStringHelper? c_SystemStringHelper;
 
     public LabAuthenticationStateProvider(
-        HttpClient p_HttpClient, 
+        IHttpClientFactory p_HttpClientFactory, 
         ISystemStringHelper p_SystemStringHelper,
-        ProtectedSessionStorage p_ProtectedSessionStorage)
+        ILocalStorageService p_ProtectedSessionStorage)
     {
-        c_HttpClient = p_HttpClient;
+        c_HttpClientFactory = p_HttpClientFactory;
         c_SystemStringHelper = p_SystemStringHelper;
-        c_ProtectedSessionStorage = p_ProtectedSessionStorage;
+        c_Storage = p_ProtectedSessionStorage;
     }
 
     public override async Task<AuthenticationState> GetAuthenticationStateAsync()
@@ -21,8 +21,8 @@ public class LabAuthenticationStateProvider :  AuthenticationStateProvider
         var m_TokenArmazenado = string.Empty;
         try
         {
-            var m_ResultadoProtegido = await c_ProtectedSessionStorage.GetAsync<string>("Token");
-            m_TokenArmazenado = m_ResultadoProtegido.Value;
+            var m_ResultadoProtegido = await c_Storage.GetItemAsync<string>("Token");
+            m_TokenArmazenado = m_ResultadoProtegido;
         }
         catch (Exception)
         {
@@ -36,7 +36,8 @@ public class LabAuthenticationStateProvider :  AuthenticationStateProvider
         if(m_TokenInvalido)
             return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
 
-        c_HttpClient!.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", m_TokenArmazenado);
+        using var m_HttpClient = c_HttpClientFactory!.CreateClient("LabAspNetIdentity");
+        m_HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", m_TokenArmazenado);
 
         return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity(c_SystemStringHelper!.CM_TransformarTokenEmClaims(m_TokenArmazenado), "jwt")));
     }

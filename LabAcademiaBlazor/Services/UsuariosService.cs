@@ -2,22 +2,29 @@
 
 public class UsuariosService : IUsuariosService
 {
-    private HttpClient C_HttpClient;
+    public IHttpClientFactory? C_HttpClientFactory { get; private set; }
+    public ILocalStorageService C_Storage { get; private set; }
     private NavigationManager C_NavigationManager;
 
-    public UsuariosService(HttpClient p_HttpClient, NavigationManager p_NavigationManager)
+    public UsuariosService(
+        IHttpClientFactory? p_HttpClientFactory,
+        NavigationManager p_NavigationManager,
+        ILocalStorageService p_Storage)
     {
-        C_HttpClient = p_HttpClient;
+        C_HttpClientFactory = p_HttpClientFactory;
         C_NavigationManager = p_NavigationManager;
+        C_Storage = p_Storage;
     }
 
     public async Task<IEnumerable<UsuarioDTO>> CM_ExibirUsuarios(string? p_Nome, bool p_SomenteAlunos = false)
     {
+        using var m_HttpClient = await C_HttpClientFactory!.CMX_ObterHttpClientAsync("LabAspNetIdentity", C_Storage!);
+
         HttpResponseMessage? m_RespostaHttp;
         if (p_SomenteAlunos)
-            m_RespostaHttp = await C_HttpClient.GetAsync($"https://localhost:7121/api/usuario/alunos?p_Nome={p_Nome}");
+            m_RespostaHttp = await m_HttpClient.GetAsync($"api/usuario/alunos?p_Nome={p_Nome}");
         else
-            m_RespostaHttp = await C_HttpClient.GetAsync($"https://localhost:7121/api/usuario/professores?p_Nome{p_Nome}");
+            m_RespostaHttp = await m_HttpClient.GetAsync($"api/usuario/professores?p_Nome{p_Nome}");
 
         if (m_RespostaHttp.StatusCode == System.Net.HttpStatusCode.Unauthorized)
             C_NavigationManager.NavigateTo("naoautorizado");
@@ -29,7 +36,8 @@ public class UsuariosService : IUsuariosService
 
     public async Task<IEnumerable<AlunoDTO>> CM_ObterAlunosAsync(string? p_Nome)
     {
-        var m_RespostaHttp = await C_HttpClient.GetAsync($"https://localhost:7121/api/usuario/alunos?p_Nome={p_Nome}");
+        using var m_HttpClient = await C_HttpClientFactory!.CMX_ObterHttpClientAsync("LabAspNetIdentity", C_Storage!);
+        var m_RespostaHttp = await m_HttpClient.GetAsync($"api/usuario/alunos?p_Nome={p_Nome}");
 
         if (m_RespostaHttp.StatusCode == System.Net.HttpStatusCode.Unauthorized)
             C_NavigationManager.NavigateTo("naoautorizado");
@@ -40,7 +48,8 @@ public class UsuariosService : IUsuariosService
 
     public async Task<IEnumerable<IdentityUserClaim<string>>> CM_ObterClaims()
     {
-        var m_RespostaHttp = await C_HttpClient.GetAsync("https://localhost:7121/api/claim");
+        using var m_HttpClient = C_HttpClientFactory!.CreateClient("LabAspNetIdentity");
+        var m_RespostaHttp = await m_HttpClient.GetAsync("api/claim");
 
         if (m_RespostaHttp.StatusCode == System.Net.HttpStatusCode.Unauthorized)
             C_NavigationManager.NavigateTo("naoautorizado");
@@ -51,7 +60,8 @@ public class UsuariosService : IUsuariosService
 
     public async Task<IEnumerable<RoleDTO>> CM_ObterRoles()
     {
-        var m_RespostaHttp = await C_HttpClient.GetAsync("https://localhost:7121/api/role");
+        using var m_HttpClient = await C_HttpClientFactory!.CMX_ObterHttpClientAsync("LabAspNetIdentity", C_Storage!);
+        var m_RespostaHttp = await m_HttpClient.GetAsync("api/role");
 
         if (m_RespostaHttp.StatusCode == System.Net.HttpStatusCode.Unauthorized)
             C_NavigationManager.NavigateTo("naoautorizado");

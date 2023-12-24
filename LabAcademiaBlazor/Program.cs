@@ -13,8 +13,16 @@ builder.Services.AddScoped<IExercicioService, ExercicioService>();
 builder.Services.AddScoped<IUsuarioTreinoService, UsuarioTreinoService>();
 builder.Services.AddScoped<ISystemStringHelper, SystemStringHelper>();
 builder.Services.AddCascadingAuthenticationState();
-builder.Services.AddScoped(a => new HttpClient());
 builder.Services.AddMudServices();
+builder.Services.AddHttpClient("LabAspNetIdentity", a =>
+{
+    a.BaseAddress = new Uri("https://providerjwt20231223203207.azurewebsites.net");
+});
+builder.Services.AddHttpClient("LabAcademiaAPI", a =>
+{
+    a.BaseAddress = new Uri("http://localhost:5239");
+});
+builder.Services.AddBlazoredLocalStorage();
 
 builder.Services.AddAuthentication(opt =>
 {

@@ -2,21 +2,24 @@
 
 public class ProfessorService : IUsuarioService<RegistrarUsuarioDTO>
 {
-    public HttpClient? C_HttpClient { get; set; }
+    public IHttpClientFactory? C_HttpClientFactory { get; private set; }
+    public ILocalStorageService C_Storage { get; private set; }
 
-    public ProfessorService(HttpClient? p_HttpClient)
+    public ProfessorService(IHttpClientFactory? p_HttpClientFactory, ILocalStorageService p_Storage)
     {
-        C_HttpClient = p_HttpClient;
+        C_HttpClientFactory = p_HttpClientFactory;
+        C_Storage = p_Storage;
     }
 
     public Task<string> CM_CriarQRCodeAsync(string p_Matricula) => throw new NotImplementedException();
 
     public async Task<string> CM_CriarUsuarioAsync(RegistrarUsuarioDTO p_Usuario)
     {
+        using var m_HttpClient = await C_HttpClientFactory!.CMX_ObterHttpClientAsync("LabAspNetIdentity", C_Storage!);
         var m_UsuarioJSON = JsonSerializer.Serialize(p_Usuario);
         var m_Content = new StringContent(m_UsuarioJSON, Encoding.UTF8, "application/json");
-        var m_Endereco = "https://localhost:7121/api/usuario/professor";
-        var m_RespostaHttp = await C_HttpClient!.PostAsync(m_Endereco, m_Content);
+        var m_Endereco = "api/usuario/professor";
+        var m_RespostaHttp = await m_HttpClient!.PostAsync(m_Endereco, m_Content);
         m_RespostaHttp.EnsureSuccessStatusCode();
 
         return await m_RespostaHttp.Content.ReadAsStringAsync();

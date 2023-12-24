@@ -25,3 +25,5 @@ global using LabAcademiaBlazor;
 global using LabAcademiaBlazor.Components;
 global using LabAcademiaBlazor.Services;
 global using LabAcademiaBlazor.Components.Pages.Dialogos;
+
+global using Blazored.LocalStorage;
