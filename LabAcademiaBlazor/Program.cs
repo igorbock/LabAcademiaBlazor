@@ -16,11 +16,19 @@ builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddMudServices();
 builder.Services.AddHttpClient("LabAspNetIdentity", a =>
 {
+#if DEBUG
+    a.BaseAddress = new Uri("https://localhost:7121");
+#else
     a.BaseAddress = new Uri("https://providerjwt20231223203207.azurewebsites.net");
+#endif
 });
 builder.Services.AddHttpClient("LabAcademiaAPI", a =>
 {
+#if DEBUG
     a.BaseAddress = new Uri("http://localhost:5239");
+#else
+    a.BaseAddress = new Uri("https://labacademiaapi20231226214200.azurewebsites.net");
+#endif
 });
 builder.Services.AddBlazoredLocalStorage();
 

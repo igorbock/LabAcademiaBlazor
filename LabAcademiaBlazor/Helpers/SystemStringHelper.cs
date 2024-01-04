@@ -7,7 +7,7 @@ public class SystemStringHelper : ISystemStringHelper
         {
             2 => Convert.FromBase64String(p_Base64 += "=="),
             3 => Convert.FromBase64String(p_Base64 += "="),
-            _ => null
+            _ => Convert.FromBase64String(p_Base64)
         };
 
     public IEnumerable<Claim> CM_TransformarTokenEmClaims(string p_Token)

@@ -30,7 +30,7 @@ public class UsuarioTreinoService : IUsuarioTreinoService
 
     public async Task CM_RelacionarUsuarioTreinoAsync(int p_Matricula, int p_Treino)
     {
-        using var m_HttpClient = await C_HttpClientFactory!.CMX_ObterHttpClientAsync("LabAspNetIdentity", C_Storage!);
+        using var m_HttpClient = await C_HttpClientFactory!.CMX_ObterHttpClientAsync("LabAcademiaAPI", C_Storage!);
 
         var m_RequestDTO = new
         {
@@ -49,7 +49,7 @@ public class UsuarioTreinoService : IUsuarioTreinoService
 
     public async Task CM_RemoverRelacaoUsuarioTreinoAsync(int p_Treino)
     {
-        using var m_HttpClient = await C_HttpClientFactory!.CMX_ObterHttpClientAsync("LabAspNetIdentity", C_Storage!);
+        using var m_HttpClient = await C_HttpClientFactory!.CMX_ObterHttpClientAsync("LabAcademiaAPI", C_Storage!);
         var m_RespostaHttp = await m_HttpClient!.DeleteAsync($"api/usuariostreinos?p_CodigoTreino={p_Treino}");
 
         if (m_RespostaHttp.StatusCode == System.Net.HttpStatusCode.Unauthorized)
