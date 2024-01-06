@@ -1,0 +1,77 @@
+﻿@page "/historico"
+@attribute [Authorize(Roles = "PROFESSOR")]
+@attribute [StreamRendering(true)]
+
+<PageTitle>Histórico</PageTitle>
+
+<MudText Typo="Typo.h6" Align="Align.Center" Class="mt-5">Histórico</MudText>
+
+<MudPaper Elevation="25">
+    <MudToolBar Class="mt-5 mb-5">
+        <MudAutocomplete T="AlunoDTO"
+                         @bind-Value="c_Aluno"
+                         Label="Aluno"
+                         SearchFunc="cm_Procurar"
+                         ToStringFunc="@(e => e == null ? null : $"{e.Nome} - {e.Email}")"
+                         ResetValueOnEmptyText="true" />
+        <MudSpacer />
+        <MudTooltip Text="Gerar relatório mensal">
+            <MudIconButton Icon="@Icons.Material.TwoTone.CalendarMonth" OnClick="@(async () => await cm_GerarRelatorioMensalAsync())" />
+        </MudTooltip>
+        <MudTooltip Text="Pesquisar histórico">
+            <MudIconButton Icon="@Icons.Material.Filled.Search" OnClick="@(async () => await cm_PesquisarAsync())" />
+        </MudTooltip>
+    </MudToolBar>
+</MudPaper>
+
+<MudDataGrid Context="treino"
+             Items="@c_Historico"
+             DragDropColumnReordering="true"
+             DragIndicatorIcon="@Icons.Material.Filled.DragIndicator"
+             ShowColumnOptions="true"
+             Hideable="true"
+             ShowMenuIcon="true">
+    <ToolBarContent>
+        <MudDatePicker Label="Inicio"
+                       Editable="true"
+                       Class="m-5"
+                       @bind-Date="C_Inicio"
+                       DateFormat="dd/MM/yyyy"
+                       Mask="@(new DateMask("dd/MM/yyyy"))" />
+        <MudDatePicker Label="Fim"
+                       Editable="true"
+                       Class="m-5"
+                       @bind-Date="C_Fim"
+                       DateFormat="dd/MM/yyyy"
+                       Mask="@(new DateMask("dd/MM/yyyy"))" />
+    </ToolBarContent>
+    <Columns>
+        <HierarchyColumn T="TreinoDTO" />
+        <PropertyColumn Property="x => x.Id" />
+        <PropertyColumn Property="x => x.Nome" />
+        <PropertyColumn Property="x => x.Inicio" />
+        <PropertyColumn Property="x => x.Fim" />
+    </Columns>
+    <ChildRowContent>
+        <MudTable T="ExercicioDTO" Context="exercicio" Hover="true" Items="@c_Exercicios!.Where(a => a.CodigoTreino == treino.Item.Id)">
+            <HeaderContent>
+                <MudTh>Id</MudTh>
+                <MudTh>Descrição</MudTh>
+                <MudTh>Séries</MudTh>
+                <MudTh>Repetição</MudTh>
+                <MudTh>Carga</MudTh>
+                <MudTh>Tempo</MudTh>
+                <MudTh>Concluído</MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd DataLabel="Id">@exercicio.Id</MudTd>
+                    <MudTd DataLabel="Descrição">@exercicio.Descricao</MudTd>
+                    <MudTd DataLabel="Séries">@exercicio.Series</MudTd>
+                    <MudTd DataLabel="Repetição">@exercicio.Repeticao</MudTd>
+                    <MudTd DataLabel="Carga">@exercicio.Carga kg</MudTd>
+                <MudTd DataLabel="Tempo">@exercicio.Tempo</MudTd>
+                    <MudTd DataLabel="Concluído"><MudCheckBox Checked="@exercicio.Concluido" /></MudTd>
+                </RowTemplate>
+            </MudTable>
+        </ChildRowContent>
+    </MudDataGrid>

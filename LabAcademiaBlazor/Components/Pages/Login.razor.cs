@@ -28,5 +28,9 @@ public partial class Login
             C_MostrarErros = true;
             C_Erros = new[] { ex.Message };
         }
+        finally
+        {
+            C_Carregando = false;
+        }
     }
 }

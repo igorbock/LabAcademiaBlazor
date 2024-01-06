@@ -14,6 +14,8 @@ public partial class Usuarios
     public IDialogService? C_DialogService { get; set; }
     [Inject]
     public ISnackbar? C_Snackbar { get; set; }
+    [Inject]
+    public NavigationManager? C_NavigationManager { get; set; }
 
     [Parameter]
     public string? Mostrar { get; set; }
@@ -113,4 +115,6 @@ public partial class Usuarios
             C_Snackbar!.Add("Relação removida com sucesso!", Severity.Success);
         }
     }
+
+    protected void cm_AdicionarUsuario() => C_NavigationManager!.NavigateTo("/registrar");
 }

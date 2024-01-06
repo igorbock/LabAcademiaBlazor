@@ -11,6 +11,7 @@ builder.Services.AddScoped<IUsuarioService<RegistrarUsuarioDTO>, ProfessorServic
 builder.Services.AddScoped<ITreinosService, TreinosService>();
 builder.Services.AddScoped<IExercicioService, ExercicioService>();
 builder.Services.AddScoped<IUsuarioTreinoService, UsuarioTreinoService>();
+builder.Services.AddScoped<IHistoricoService, HistoricoService>();
 builder.Services.AddScoped<ISystemStringHelper, SystemStringHelper>();
 builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddMudServices();

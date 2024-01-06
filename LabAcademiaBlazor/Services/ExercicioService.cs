@@ -16,7 +16,7 @@ public class ExercicioService : IExercicioService
         C_Storage = p_Storage;
     }
 
-    public async Task<IEnumerable<ExercicioDTO>> CM_ObterExerciciosAsync()
+    public async Task<ObservableCollection<ExercicioDTO>> CM_ObterExerciciosAsync()
     {
         using var m_HttpClient = await C_HttpClientFactory!.CMX_ObterHttpClientAsync("LabAcademiaAPI", C_Storage!);
         var m_Endereco = $"api/exercicios";
@@ -25,8 +25,8 @@ public class ExercicioService : IExercicioService
         if (m_RespostaHttp.StatusCode == System.Net.HttpStatusCode.Unauthorized)
             C_NavigationManager!.NavigateTo("naoautorizado");
 
-        var m_Retorno = await m_RespostaHttp.Content.ReadFromJsonAsync<IEnumerable<ExercicioDTO>>();
-        return m_Retorno ?? Enumerable.Empty<ExercicioDTO>();
+        var m_Retorno = await m_RespostaHttp.Content.ReadFromJsonAsync<ObservableCollection<ExercicioDTO>>();
+        return m_Retorno ?? new ObservableCollection<ExercicioDTO>();
     }
 
     public async Task CM_RemoverExercicioAsync(int p_Codigo)

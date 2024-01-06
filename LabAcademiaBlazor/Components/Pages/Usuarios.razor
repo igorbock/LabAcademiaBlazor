@@ -2,7 +2,7 @@
 @attribute [Authorize(Roles = "ADM,PROFESSOR")]
 @attribute [StreamRendering(true)]
 
-    @if (C_Usuarios == null)
+@if (C_Usuarios == null)
 {
     <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
 }
@@ -50,20 +50,24 @@ else
                         </HeaderContent>
                         <RowTemplate>
                             <MudTd DataLabel="Id">@treino.Id</MudTd>
-                            <MudTd DataLabel="Nome">@treino.Nome</MudTd>
-                            <MudTd DataLabel="Código">@treino.Codigo</MudTd>
-                            <MudTd DataLabel="Opções">
-                                <MudButton Color="Color.Error" OnClick="@(() => cm_ExcluirTreinoAsync(treino.Id))">
-                                    <MudIcon Icon="@Icons.Material.Filled.DeleteForever" />
-                                </MudButton>
-                            </MudTd>
-                        </RowTemplate>
-                    </MudTable>
+                                <MudTd DataLabel="Nome">@treino.Nome</MudTd>
+                                <MudTd DataLabel="Código">@treino.Codigo</MudTd>
+                                <MudTd DataLabel="Opções">
+                                    <MudButton Color="Color.Error" OnClick="@(() => cm_ExcluirTreinoAsync(treino.Id))">
+                                        <MudIcon Icon="@Icons.Material.Filled.DeleteForever" />
+                                    </MudButton>
+                                </MudTd>
+                            </RowTemplate>
+                        </MudTable>
                         <MudButton Class="mt-3" Variant="Variant.Filled" Color="Color.Success" OnClick="(() => cm_AdicionarRelacao(usuario.Item.Matricula))">
-                        <MudIcon Icon="@Icons.Material.Filled.AddBox" />
-                    </MudButton>
-                </ChildRowContent>
-            </MudDataGrid>
-        </NotAuthorized>
-    </AuthorizeView>
+                            <MudIcon Icon="@Icons.Material.Filled.AddBox" />
+                        </MudButton>
+                    </ChildRowContent>
+                </MudDataGrid>
+            </NotAuthorized>
+        </AuthorizeView>
+
+    <MudButton Class="mt-3" Variant="Variant.Filled" Color="Color.Primary" OnClick="cm_AdicionarUsuario">
+        <MudIcon Icon="@Icons.Material.Filled.AddBox" />
+    </MudButton>
 }
