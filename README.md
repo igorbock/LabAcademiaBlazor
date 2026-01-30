@@ -9,3 +9,7 @@ Projeto com a tecnologia Blazor para gerenciamento de professores, alunos, trein
 [LabAcademiaAPI](https://github.com/igorbock/LabAcademiaAPI): API com as regras de negócios dos treinos e exercícios.
 
 [LabAcademia](https://github.com/igorbock/LabAcademia): Aplicativo em MAUI para utilização dos alunos visando a portabilidade com Android e iOS.
+
+# Alterações futuras
+
+Colocar o projeto ShieldJWT para autenticar e autorizar usuários. Arquivar o projeto LabAspNetIdentity.
